@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getArticle, type ArticleContent } from "../lib/api";
 
 export default function ArticlePage() {
@@ -22,13 +24,36 @@ export default function ArticlePage() {
             <Link to="/">← Back</Link>
             <h1 style={{ marginBottom: 6 }}>{content.meta.title}</h1>
             <div style={{ opacity: 0.8, marginBottom: 12 }}>
-                {content.meta.date} / {content.meta.tags.length ? content.meta.tags.join(", ") : "(no tags)"}
+				{content.meta.date}
+				{" / "}
+				{content.meta.tags.length ? content.meta.tags.join(", ") : "(no tags)"}
             </div>
 
-            {/* raw markdown */}
-            <pre style={{ whiteSpace: "pre-wrap", border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
-                {content.body}
-            </pre>
+			<article className="md">
+				<ReactMarkdown
+				remarkPlugins={[remarkGfm]}
+				components={{
+					a({ href, children, ...props }) {
+						const isExternal = href?.startsWith("http://") || href?.startsWith("https://");
+						return (
+							<a
+							href={href}
+							target={isExternal ? "_blank" : undefined}
+							rel={isExternal ? "noopener noreferrer" : undefined}
+							{...props}
+						>
+							{children}
+						</a>
+						);
+					},
+					img({ ...props }) {
+						return <img {...props} style={{ maxWidth: "100%" }} />;
+					},
+					}
+				}>
+					{content.body}
+				</ReactMarkdown>
+			</article>
         </div>
     );
 }

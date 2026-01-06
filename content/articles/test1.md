@@ -4,7 +4,6 @@ date: "2021-12-13"
 tags: []
 ---
 
-# Merry CryptoMath !!!!!!
 　この記事は [CTF Advent Calendar 2021](https://adventar.org/calendars/6914) の25日目の記事です。昨日の記事はSatokiさんによる [【文学】 Flagを読む](https://hackmd.io/@satoki/BkeNHyWot) で、面白いフラグを紹介してくれたりLeetについて説明してくれました。
 
 　ところで、最初はアドカレに参加するつもりはなかったのですが、激寒ギャグをしまっておくのもあれだということでCVPの記事を書くことにしました。そのためこの記事を枕にして寂しい夜を過ごすともっと寂しくなる一方です。  

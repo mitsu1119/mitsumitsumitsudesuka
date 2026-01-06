@@ -4,6 +4,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getArticle, type ArticleContent } from "../lib/api";
 
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
+import python from "react-syntax-highlighter/dist/esm/languages/prism/python";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+SyntaxHighlighter.registerLanguage("python", python);
+
 export default function ArticlePage() {
     const { slug } = useParams<{ slug: string }>();
     const [content, setContent] = useState<ArticleContent | null>(null);
@@ -49,8 +55,59 @@ export default function ArticlePage() {
 					img({ ...props }) {
 						return <img {...props} style={{ maxWidth: "100%" }} />;
 					},
+					pre({ children }) {
+						return <>{children}</>;
+					},
+					code({ className, children, ...props }) {
+						const m = /language-([a-z0-9_-]+)/i.exec(className ?? "");
+						const lang = m?.[1]?.toLowerCase();
+
+						const codeString = String(children).replace(/\n$/, "");
+
+						if (!lang) {
+                			return (
+								<code
+								{...props}
+								style={{
+								padding: "0.15em 0.35em",
+								border: "1px solid #d0d7de",
+								borderRadius: 6,
+								background: "#f6f8fa",
+								fontFamily:
+									'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+								fontSize: "0.95em",
+								}}
+								>
+ 				                   {codeString}
+                			</code>
+			                );
+            		    }
+
+						return (
+							<SyntaxHighlighter
+								language={lang}
+								style={oneDark}
+								PreTag="div"
+								customStyle={{
+									margin: "0.8em 0",
+									borderRadius: 10,
+									border: "1px solid #d0d7de",
+									padding: 12,
+									overflowX: "auto",
+								}}
+								codeTagProps={{
+									style: {
+									fontFamily:
+										'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+									fontSize: "0.95em",
+									},
+								}}
+								>
+								{codeString}
+								</SyntaxHighlighter>
+							);
 					}
-				}>
+				}}>
 					{content.body}
 				</ReactMarkdown>
 			</article>

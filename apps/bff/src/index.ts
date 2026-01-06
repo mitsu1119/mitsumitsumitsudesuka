@@ -1,4 +1,4 @@
-import { articleIndex } from "./generated/articles";
+import { articleIndex, articleBodies } from "./generated/articles";
 
 export interface Env {
 	ALLOWED_ORIGINS: string;
@@ -62,6 +62,16 @@ export default {
 		// GET /api/articles -> articlesIndex
 		if(url.pathname === "/api/articles" && _req.method === "GET") {
 			return json(articleIndex, cors);
+		}
+
+		// GET /api/articles/:slug -> body
+		const m = url.pathname.match(/^\/api\/articles\/([^/]+)$/);
+		if(m && _req.method === "GET") {
+			const slug = decodeURIComponent(m[1]);
+			const body = articleBodies[slug];
+			if(body === undefined) return new Response("Not Found", { status: 404 });
+
+			return new Response(body, { headers: { "content-type": "text/plain; charset=utf-8" } });
 		}
 
 	    return new Response("Not Found", { status: 404 });

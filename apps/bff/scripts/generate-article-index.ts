@@ -61,6 +61,8 @@ async function main() {
     sort((a,b) => a.localeCompare(b));
 
     const items: ArticleIndexItem[] = [];
+    const articleBodies: Record<string, string> = {};
+
     for(const filename of mdFiles) {
         const full_path = path.join(ARTICLES_DIR, filename);
         const raw = await fs.readFile(full_path, "utf8");
@@ -80,6 +82,8 @@ async function main() {
             date: fm.date,
             tags: fm.tags,
         });
+
+        articleBodies[slug] = parsed.content;
     }
 
     items.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
@@ -96,6 +100,7 @@ async function main() {
     };
 
     export const articleIndex: ArticleIndexItem[] = ${JSON.stringify(items, null, 2)};
+    export const articleBodies: Record<string, string> = ${JSON.stringify(articleBodies, null, 2)};
     `;
 
     await fs.writeFile(OUT_FILE, content, "utf-8");

@@ -22,7 +22,8 @@ export default function ArticlesIndex() {
 
     return (
         <div style={{ padding: 24, maxWidth: 900, margin: "0 auto" }}>
-            <h1>Articles</h1>
+            <h1>みつみつみつですか？</h1>
+			<h2>はい</h2>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "grid", gap: 10 }}>
                 {sorted.map((a) => (
                     <li key={a.slug}>

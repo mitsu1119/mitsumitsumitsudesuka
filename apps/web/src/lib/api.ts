@@ -4,6 +4,7 @@ export type ArticleIndexItem = {
 	title: string;
 	date: string;
 	tags: string[];
+	math: Boolean;
 };
 
 export type ArticleContent = {

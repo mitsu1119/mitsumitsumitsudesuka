@@ -12,6 +12,7 @@ type ArticleIndexItem = {
     title: string;
     date: string;
     tags: string[];
+    math: Boolean,
 };
 
 const BFF_ROOT = process.cwd();
@@ -45,7 +46,8 @@ const YMD = z
 const FrontmatterSchema = z.object({
     title: z.string().trim().min(1, "title must be non-empty string"),
     date: YMD,
-    tags: z.array(z.string().trim().min(1, "tags must not contain empty string"))
+    tags: z.array(z.string().trim().min(1, "tags must not contain empty string")),
+    math: z.boolean()
 }).strict();
 
 async function main() {
@@ -81,6 +83,7 @@ async function main() {
             title: fm.title,
             date: fm.date,
             tags: fm.tags,
+            math: fm.math
         });
 
         articleBodies[slug] = parsed.content;
@@ -102,6 +105,7 @@ async function main() {
         title: string;
         date: string;
         tags: string[];
+        math: Boolean;
     };
 
     export const articleIndex: ArticleIndexItem[] = ${JSON.stringify(items, null, 2)};

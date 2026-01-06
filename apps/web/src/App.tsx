@@ -14,6 +14,22 @@ export default function App() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+        const url = `${API_BASE}/api/articles`;
+
+        console.log("VITE_API_BASE_URL =", API_BASE);
+        console.log("fetch url =", url);
+
+        fetch(url)
+            .then((r) => {
+            console.log("status =", r.status);
+            return r.json();
+            })
+            .then((j) => console.log("json =", j))
+            .catch((e) => console.error(e));
+    }, []);
+
+    useEffect(() => {
         const ac = new AbortController();
 
         (async () => {

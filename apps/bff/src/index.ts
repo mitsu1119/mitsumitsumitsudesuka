@@ -1,4 +1,4 @@
-import { articleIndex, articleBodies } from "./generated/articles";
+import { articleIndex, slugContent } from "./generated/articles";
 
 export interface Env {
 	ALLOWED_ORIGINS: string;
@@ -87,10 +87,10 @@ export default {
 			if(decoded === null || !validateSlug(decoded)) {
 				return new Response("Bad Request", { status: 400, })
 			}
-			const body = articleBodies[decoded];
-			if(body === undefined) return new Response("Not Found", { status: 404, headers: { ...cors } });
+			const content = slugContent[decoded];
+			if(content === undefined) return new Response("Not Found", { status: 404, headers: { ...cors } });
 
-			return new Response(body, { headers: { "content-type": "text/plain; charset=utf-8" } });
+			return json(content, cors);
 		}
 
 	    return new Response("Not Found", { status: 404 });

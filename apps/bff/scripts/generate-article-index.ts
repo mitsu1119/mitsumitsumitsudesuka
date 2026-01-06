@@ -90,6 +90,11 @@ async function main() {
 
     await fs.mkdir(path.dirname(OUT_FILE), { recursive: true });
 
+    const slugContent: Record<string, { meta: ArticleIndexItem; body: string }> = {};
+    for (const meta of items) {
+        slugContent[meta.slug] = { meta, body: articleBodies[meta.slug] };
+    }  
+
     const content = `
     export type ArticleIndexItem = {
         slug: string;
@@ -100,7 +105,7 @@ async function main() {
     };
 
     export const articleIndex: ArticleIndexItem[] = ${JSON.stringify(items, null, 2)};
-    export const articleBodies: Record<string, string> = ${JSON.stringify(articleBodies, null, 2)};
+    export const slugContent: Record<string, { meta: ArticleIndexItem; body: string }> = ${JSON.stringify(slugContent, null, 2)};
     `;
 
     await fs.writeFile(OUT_FILE, content, "utf-8");

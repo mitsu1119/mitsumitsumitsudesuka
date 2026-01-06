@@ -1,0 +1,17 @@
+{
+  "name": "mitsumitsumitsudesuka",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "deploy:bff": "pnpm -C apps/bff run deploy",
+    "deploy:web": "pnpm -C apps/web run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0"
+}

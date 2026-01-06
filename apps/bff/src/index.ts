@@ -1,26 +1,31 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
-
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		const url = new URL(request.url);
-		switch (url.pathname) {
-			case '/message':
-				return new Response('Hello, World!');
-			case '/random':
-				return new Response(crypto.randomUUID());
-			default:
-				return new Response('Not Found', { status: 404 });
+	async fetch(_req: Request, _env: Env, _ctx: ExecutionContext): Promise<Response> {
+		const url = new URL(_req.url);
+
+		// GET /api/articles -> hello
+		if(url.pathname === "/api/articles" && _req.method === "GET") {
+			return new Response(JSON.stringify({ hello: "hello" }), {
+				status: 200,
+				headers: {
+					"content-type": "application/JSON; charset=utf-8",
+					"access-control-allow-origin": "*"
+				}
+			});
 		}
-	},
-} satisfies ExportedHandler<Env>;
+
+		// OPTIONS (CORS preflight) も一応返す
+   		 if (url.pathname.startsWith("/api/") && _req.method === "OPTIONS") {
+     		return new Response(null, {
+        		status: 204,
+        		headers: {
+          			"access-control-allow-origin": "*",
+          			"access-control-allow-methods": "GET,OPTIONS",
+         			"access-control-allow-headers": "content-type",
+          			"access-control-max-age": "86400"
+        		}
+      		});
+    	}
+		
+	    return new Response("Not Found", { status: 404 });
+	}
+}
